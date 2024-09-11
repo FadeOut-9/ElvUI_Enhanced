@@ -76,14 +76,17 @@ S:AddCallbackForAddon("Blizzard_AchievementUI", "Enhanced_AchievementUI", functi
 	end)
 
 	hooksecurefunc("AchievementFrameComparison_UpdateStatusBars", function(id)
+		local numAchievements, numCompleted
 		if id == "summary" then
-			id = -1
+			numAchievements, numCompleted = GetNumCompletedAchievements()
+		else
+			numAchievements, numCompleted = AchievementFrame_GetCategoryTotalNumAchievements(id, true)
 		end
-		local numAchievements, numCompleted = GetCategoryNumAchievements(id)
+
 		local statusBar = AchievementFrameComparisonSummaryPlayerStatusBar
 		PlayAnimationStatusBar(statusBar, numAchievements, numCompleted)
 
-		local friendCompleted = GetComparisonCategoryNumAchievements(id)
+		local friendCompleted = GetComparisonCategoryNumAchievements(id == "summary" and ACHIEVEMENT_COMPARISON_SUMMARY_ID or id)
 		statusBar = AchievementFrameComparisonSummaryFriendStatusBar
 		PlayAnimationStatusBar(statusBar, numAchievements, friendCompleted)
 	end)
